@@ -1,0 +1,25 @@
+.navbar-nav[b-sw28rsfo32] {
+    display: flex; 
+    justify-content: flex-end;
+    margin-left: auto; 
+    align-items: center;
+    list-style: none; 
+}
+
+.nav-item[b-sw28rsfo32] {
+    font-size: 0.9rem;
+    padding: 0; 
+    margin-left: 5px;
+}
+
+.nav-link.active[b-sw28rsfo32] {
+    background-color: transparent; 
+}
+
+.nav-link:hover[b-sw28rsfo32] {
+    background-color: rgba(255, 255, 255, 0.1); 
+}
+
+.navbar-brand[b-sw28rsfo32] {
+    align-self: center; 
+}

@@ -1,0 +1,112 @@
+﻿@page "/"
+
+<div class="home-container">
+    <h1 class="text-center">Welcome to CustomerDataApi!</h1>
+
+    <p class="welcome-text">
+        CustomerDataApi is a platform designed for efficient management of customer data. Our service allows you to
+        easily and securely store, edit, and manage user data, providing a user-friendly interface and a powerful API.
+    </p>
+
+    <section class="features-section">
+        <h2>Main Features</h2>
+        <ul class="features-list">
+            <li><strong>User Management:</strong> Easy addition, update, and deletion of customer data.</li>
+            <li><strong>Secure Data Storage:</strong> We guarantee a high level of security to protect your data.</li>
+            <li><strong>Flexible API:</strong> An intuitive API for integration into any systems and applications.</li>
+            <li><strong>User Support:</strong> Attentive and responsive technical support ready to assist at any time.</li>
+        </ul>
+    </section>
+
+    <section class="contact-section">
+        <h2>Contact Us</h2>
+        <p>If you have any questions or suggestions, our team will be happy to help! Reach out to us:</p>
+        <ul class="contact-list">
+            <li>Email: <a href="mailto:antonbro12@gmail.com">support@gmail.com</a></li>
+            <li>Phone: <a href="tel:+1234567890">+44 (772) 213-890</a></li>
+        </ul>
+    </section>
+</div>
+
+<style>
+    .home-container {
+        max-width: 800px;
+        margin: 0 auto;
+        padding: 20px;
+        border: 1px solid #ddd;
+        border-radius: 5px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        background-color: #f9f9f9;
+        font-family: Arial, sans-serif;
+    }
+
+    .text-center {
+        text-align: center;
+    }
+
+    .welcome-text {
+        font-size: 1.2rem;
+        line-height: 1.6;
+        margin: 20px 0;
+        color: #333;
+        text-align: justify;
+    }
+
+    .features-section, .contact-section {
+        margin-top: 30px;
+    }
+
+    h2 {
+        color: #4CAF50;
+        text-align: center;
+        font-size: 1.5rem;
+        margin-bottom: 15px;
+    }
+
+    .features-list {
+        list-style-type: none;
+        padding: 0;
+        color: #333;
+    }
+
+        .features-list li {
+            margin-bottom: 10px;
+            font-size: 1rem;
+            padding-left: 15px;
+            position: relative;
+        }
+
+            .features-list li::before {
+                content: "✓";
+                color: #4CAF50;
+                font-weight: bold;
+                position: absolute;
+                left: 0;
+            }
+
+    .contact-section {
+        background-color: #e9f7f2;
+        padding: 15px;
+        border-radius: 5px;
+        text-align: center;
+    }
+
+    .contact-list {
+        list-style-type: none;
+        padding: 0;
+    }
+
+        .contact-list li {
+            margin-bottom: 8px;
+            font-size: 1.1rem;
+        }
+
+        .contact-list a {
+            color: #1E7F36;
+            text-decoration: none;
+        }
+
+            .contact-list a:hover {
+                text-decoration: underline;
+            }
+</style>

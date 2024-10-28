@@ -1,0 +1,108 @@
+/* /Shared/MainLayout.razor.rz.scp.css */
+.page[b-bm52utqkbs] {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+}
+
+main[b-bm52utqkbs] {
+    flex: 1;
+}
+
+.sidebar[b-bm52utqkbs] {
+    background-image: linear-gradient(180deg, rgb(5, 39, 103) 0%, #3a0647 70%);
+}
+
+.top-row[b-bm52utqkbs] {
+    background-color: #f7f7f7;
+    border-bottom: 1px solid #d6d5d5;
+    justify-content: flex-end;
+    height: 3.5rem;
+    display: flex;
+    align-items: center;
+}
+
+    .top-row[b-bm52utqkbs]  a, .top-row[b-bm52utqkbs]  .btn-link {
+        white-space: nowrap;
+        margin-left: 1.5rem;
+        text-decoration: none;
+    }
+
+    .top-row[b-bm52utqkbs]  a:hover, .top-row[b-bm52utqkbs]  .btn-link:hover {
+        text-decoration: underline;
+    }
+
+    .top-row[b-bm52utqkbs]  a:first-child {
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+
+@media (max-width: 640.98px) {
+    .top-row:not(.auth)[b-bm52utqkbs] {
+        display: none;
+    }
+
+    .top-row.auth[b-bm52utqkbs] {
+        justify-content: space-between;
+    }
+
+    .top-row[b-bm52utqkbs]  a, .top-row[b-bm52utqkbs]  .btn-link {
+        margin-left: 0;
+    }
+}
+
+@media (min-width: 641px) {
+    .page[b-bm52utqkbs] {
+        flex-direction: row;
+    }
+
+    .sidebar[b-bm52utqkbs] {
+        width: 250px;
+        height: 100vh;
+        position: sticky;
+        top: 0;
+    }
+
+    .top-row[b-bm52utqkbs] {
+        position: sticky;
+        top: 0;
+        z-index: 1;
+    }
+
+    .top-row.auth[b-bm52utqkbs]  a:first-child {
+        flex: 1;
+        text-align: right;
+        width: 0;
+    }
+
+    .top-row[b-bm52utqkbs], article[b-bm52utqkbs] {
+        padding-left: 2rem !important;
+        padding-right: 1.5rem !important;
+    }
+}
+/* /Shared/NavMenu.razor.rz.scp.css */
+.navbar-nav[b-sw28rsfo32] {
+    display: flex; 
+    justify-content: flex-end;
+    margin-left: auto; 
+    align-items: center;
+    list-style: none; 
+}
+
+.nav-item[b-sw28rsfo32] {
+    font-size: 0.9rem;
+    padding: 0; 
+    margin-left: 5px;
+}
+
+.nav-link.active[b-sw28rsfo32] {
+    background-color: transparent; 
+}
+
+.nav-link:hover[b-sw28rsfo32] {
+    background-color: rgba(255, 255, 255, 0.1); 
+}
+
+.navbar-brand[b-sw28rsfo32] {
+    align-self: center; 
+}

@@ -1,0 +1,116 @@
+﻿@page "/login"
+@inject HttpClient HttpClient
+@inject NavigationManager NavigationManager
+@inject IJSRuntime JSRuntime
+@inject Services.UserSessionService UserSessionService
+@using CustomerDataBlazorApp.Models
+
+<h1 class="text-center">Login</h1>
+
+<EditForm Model="@loginModel" OnValidSubmit="HandleLogin" class="login-form">
+    <DataAnnotationsValidator />
+    <ValidationSummary />
+
+    <div class="form-group">
+        <label for="email">Email:</label>
+        <InputText id="email" @bind-Value="loginModel.Email" type="email" class="form-control" />
+    </div>
+
+    <button type="submit" class="submit-button">Login</button>
+
+    @if (!string.IsNullOrEmpty(loginMessage))
+    {
+        <p class="login-message @(isLoginSuccessful ? "success-message" : "error-message")">@loginMessage</p>
+    }
+</EditForm>
+
+<style>
+    .login-form {
+        max-width: 400px;
+        margin: 0 auto;
+        padding: 20px;
+        border: 1px solid #ddd;
+        border-radius: 5px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        background-color: #f9f9f9;
+    }
+
+    .form-group {
+        display: flex;
+        flex-direction: column;
+        margin-bottom: 15px;
+    }
+
+        .form-group label {
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+
+    .form-control {
+        padding: 8px;
+        font-size: 1rem;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+    }
+
+    .submit-button {
+        width: 100%;
+        padding: 10px;
+        background: linear-gradient(90deg, #4CAF50, #1E7F36);
+        color: white;
+        border: none;
+        border-radius: 5px;
+        font-size: 1.1rem;
+        cursor: pointer;
+        text-align: center;
+    }
+
+    .login-message {
+        margin-top: 20px;
+        font-weight: bold;
+    }
+
+    .success-message {
+        color: #4CAF50;
+    }
+
+    .error-message {
+        color: red;
+    }
+</style>
+
+@code {
+    private LoginModel loginModel = new LoginModel();
+    private string loginMessage;
+    private bool isLoginSuccessful;
+
+    private async Task HandleLogin()
+    {
+        var response = await HttpClient.PostAsJsonAsync("api/customers/login", loginModel);
+
+        if (response.IsSuccessStatusCode)
+        {
+            var customer = await response.Content.ReadFromJsonAsync<User>();
+            loginMessage = "Login successful!";
+            isLoginSuccessful = true;
+
+            await JSRuntime.InvokeVoidAsync("localStorageHelper.setItem", "UserEmail", customer.Email);
+            await JSRuntime.InvokeVoidAsync("localStorageHelper.setItem", "UserFirstName", customer.FirstName);
+
+            UserSessionService.Email = customer.Email;
+            UserSessionService.FirstName = customer.FirstName;
+
+            NavigationManager.NavigateTo($"/profile?name={customer.FirstName}");
+        }
+        else
+        {
+            loginMessage = "User with this email not found.";
+            isLoginSuccessful = false;
+        }
+    }
+
+    private class LoginModel
+    {
+        public string Email { get; set; }
+    }
+}

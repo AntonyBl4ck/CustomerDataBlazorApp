@@ -1,0 +1,210 @@
+﻿@page "/profile"
+@using System.Text.Json
+@inject HttpClient HttpClient
+@inject IJSRuntime JSRuntime
+
+<div class="profile-container">
+    <h2 class="text-center">User List</h2>
+    <table class="table profile-table">
+        <thead>
+            <tr>
+                <th>First Name</th>
+                <th>Surname</th>
+                <th>Email</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            @if (users != null && users.Count > 0)
+            {
+                foreach (var user in users)
+                {
+                    <tr>
+                        <td>@user.FirstName</td>
+                        <td>@user.Surname</td>
+                        <td>@user.Email</td>
+                        <td>
+                            <button class="btn btn-danger" @onclick="() => DeleteUser(user.Id)">Delete</button>
+                        </td>
+                    </tr>
+                }
+            }
+            else
+            {
+                <tr>
+                    <td colspan="4">No users found.</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+
+    <h2 class="text-center">Add User</h2>
+    <EditForm Model="@newUser" OnValidSubmit="HandleAddUser" class="profile-form">
+        <DataAnnotationsValidator />
+        <ValidationSummary />
+
+        <div class="form-group">
+            <label for="firstName">First Name:</label>
+            <InputText id="firstName" @bind-Value="newUser.FirstName" class="form-control" />
+        </div>
+
+        <div class="form-group">
+            <label for="surname">Surname:</label>
+            <InputText id="surname" @bind-Value="newUser.Surname" class="form-control" />
+        </div>
+
+        <div class="form-group">
+            <label for="email">Email:</label>
+            <InputText id="email" @bind-Value="newUser.Email" type="email" class="form-control" />
+        </div>
+
+        <button type="submit" class="submit-button">Add User</button>
+    </EditForm>
+</div>
+
+<style>
+    .profile-container {
+        max-width: 800px;
+        margin: 0 auto;
+        padding: 20px;
+        border: 1px solid #ddd;
+        border-radius: 5px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        background-color: #f9f9f9;
+    }
+
+    .profile-form, .profile-table {
+        width: 100%;
+    }
+
+    .text-center {
+        text-align: center;
+    }
+
+    .form-group {
+        display: flex;
+        flex-direction: column;
+        margin-bottom: 15px;
+    }
+
+        .form-group label {
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+
+    .form-control {
+        padding: 8px;
+        font-size: 1rem;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+    }
+
+    .submit-button {
+        width: 100%;
+        padding: 10px;
+        background: linear-gradient(90deg, #4CAF50, #1E7F36);
+        color: white;
+        border: none;
+        border-radius: 5px;
+        font-size: 1.1rem;
+        cursor: pointer;
+        text-align: center;
+    }
+
+        .submit-button:disabled {
+            background-color: #ccc;
+            cursor: not-allowed;
+        }
+
+    .table {
+        width: 100%;
+        margin-bottom: 20px;
+        border-collapse: collapse;
+    }
+
+        .table th, .table td {
+            border: 1px solid #ddd;
+            padding: 10px;
+            text-align: left;
+        }
+
+        .table th {
+            background-color: #f1f1f1;
+            font-weight: bold;
+        }
+
+    .btn-danger {
+        background-color: #f44336;
+        color: white;
+        border: none;
+        padding: 6px 12px;
+        border-radius: 4px;
+        cursor: pointer;
+    }
+
+        .btn-danger:hover {
+            background-color: #d32f2f;
+        }
+</style>
+
+@code {
+    private string UserFirstName;
+    private string UserSurname;
+    private string UserEmail;
+    private List<User> users = new List<User>();
+    private User newUser = new User();
+
+    protected override async Task OnInitializedAsync()
+    {
+        var userJson = await JSRuntime.InvokeAsync<string>("localStorageHelper.getItem", "UserData");
+
+        if (!string.IsNullOrEmpty(userJson))
+        {
+            var user = JsonSerializer.Deserialize<User>(userJson);
+            if (user != null)
+            {
+                UserFirstName = user.FirstName;
+                UserSurname = user.Surname;
+                UserEmail = user.Email;
+            }
+        }
+
+        await LoadUsers();
+    }
+
+    private async Task LoadUsers()
+    {
+        users = await HttpClient.GetFromJsonAsync<List<User>>("api/customers/users");
+    }
+
+    private async Task HandleAddUser()
+    {
+        var response = await HttpClient.PostAsJsonAsync("api/customers/register", newUser);
+
+        if (response.IsSuccessStatusCode)
+        {
+            await LoadUsers();
+            newUser = new User();
+        }
+        else
+        {
+            var errorMessage = await response.Content.ReadAsStringAsync();
+            await JSRuntime.InvokeVoidAsync("alert", $"Error: {errorMessage}");
+        }
+    }
+
+    private async Task DeleteUser(int userId)
+    {
+        var response = await HttpClient.DeleteAsync($"api/customers/{userId}");
+
+        if (response.IsSuccessStatusCode)
+        {
+            await LoadUsers();
+        }
+        else
+        {
+            var errorMessage = await response.Content.ReadAsStringAsync();
+            await JSRuntime.InvokeVoidAsync("alert", $"Error: {errorMessage}");
+        }
+    }
+}
